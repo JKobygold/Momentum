@@ -1,22 +1,19 @@
 /**
  * Chabad Forms - External JavaScript Library
- * This file contains all the form logic extracted from momentum.html
- * Host this on a CDN or static file server for better performance
- *
- * EXACT COPY from momentum.html lines 2992-4213
+ * Extracted from momentum.html - All form interaction logic
  */
 
 (function() {
   'use strict';
 
-  // Initialize the global ChabadForms object
+  // Initialize global namespace
   window.ChabadForms = window.ChabadForms || {};
 
   // ============================================================================
-  // ALL CODE BELOW IS EXACT COPY FROM MOMENTUM.HTML LINES 2992-4213
+  // EXACT CODE FROM MOMENTUM.HTML LINES 2992-4213
   // ============================================================================
 
-    
+
     let currentSelection = {
       amount: 180,
       title: 'Gold Benefactor',
@@ -269,7 +266,7 @@
           }
         });
       }
-    
+
       // Form handlers
       const customAmount = document.getElementById('newCustomAmount');
       if (customAmount) {
@@ -280,17 +277,17 @@
           }
         });
       }
-    
+
       const cardButton = document.getElementById('newCardButton');
       if (cardButton) {
         cardButton.addEventListener('click', handleFormSubmission);
       }
-    
+
       const dedicationType = document.getElementById('newDedicationType');
       if (dedicationType) {
         dedicationType.addEventListener('change', updateDedicationField);
       }
-    
+
       // Card number formatting
       const cardNumber = document.getElementById('newCardNumber');
       if (cardNumber) {
@@ -298,7 +295,7 @@
           this.value = this.value.replace(/\s/g, '').replace(/(.{4})/g, '$1 ').trim();
         });
       }
-    
+
       setupFieldSync();
 
       // Initialize progress bar animation
@@ -591,23 +588,23 @@
       document.getElementById('modalTier').textContent = `${currentSelection.title} - ${currentSelection.subtitle}`;
       document.getElementById('modalDescription').textContent = currentSelection.description;
     }
-    
+
     function updateDisplay() {
       const frequency = currentSelection.type === 'monthly' ? '/month' : '';
       document.getElementById('selectedAmount').textContent = `$${currentSelection.amount}${frequency}`;
       document.getElementById('selectedTier').textContent = `${currentSelection.title} - ${currentSelection.subtitle}`;
       document.getElementById('selectedDescription').textContent = currentSelection.description;
     }
-    
+
     function updateDedicationField() {
       const dedicationType = document.getElementById('newDedicationType').value;
       const nameField = document.getElementById('newDedicationNameField');
       const messageField = document.getElementById('newDedicationMessageField');
       const label = document.getElementById('newDedicationLabel');
-      
+
       nameField.style.display = 'none';
       messageField.style.display = 'none';
-      
+
       if (dedicationType === 'honor') {
         nameField.style.display = 'block';
         label.textContent = 'In honor of (name)';
@@ -621,7 +618,7 @@
         messageField.style.display = 'block';
       }
     }
-    
+
     function setupFieldSync() {
       // This will sync with any hidden Chabad form fields that exist
       const mappings = [
@@ -638,7 +635,7 @@
         { new: 'newExpiryMonth', chabad: 'input_7_cc_exp_month' },
         { new: 'newExpiryYear', chabad: 'input_7_cc_exp_year' }
       ];
-    
+
       mappings.forEach(mapping => {
         const newField = document.getElementById(mapping.new);
         if (newField) {
@@ -654,7 +651,7 @@
           });
         }
       });
-    
+
       // Phone field special handling
       const phoneField = document.getElementById('newPhone');
       if (phoneField) {
@@ -663,20 +660,20 @@
           if (phone.length >= 10) {
             const areaCode = phone.substring(0, 3);
             const number = phone.substring(3);
-            
+
             const chabadArea = document.getElementById('input_6_area');
             const chabadPhone = document.getElementById('input_6_phone');
-            
+
             if (chabadArea) chabadArea.value = areaCode;
             if (chabadPhone) chabadPhone.value = number;
           }
         });
       }
     }
-    
+
     function validateForm() {
       const required = ['newFirstName', 'newLastName', 'newEmail', 'newAddress', 'newCity', 'newState', 'newZipCode', 'newPhone', 'newCardNumber', 'newCvv', 'newNameOnCard', 'newExpiryMonth', 'newExpiryYear'];
-      
+
       for (let field of required) {
         const element = document.getElementById(field);
         if (!element || !element.value.trim()) {
@@ -684,7 +681,7 @@
           return false;
         }
       }
-      
+
       if (currentSelection.isCustom) {
         const customAmount = document.getElementById('newCustomAmount');
         if (!customAmount.value || customAmount.value < 1) {
@@ -698,10 +695,10 @@
         alert('Please select a donation amount.');
         return false;
       }
-      
+
       return true;
     }
-    
+
     // Wait for the Chabad.org form to be generated (might be in iframe!)
     function waitForChabadForm(maxAttempts = 20) {
       return new Promise((resolve) => {
@@ -1185,7 +1182,7 @@
 
       console.log('✅ All fields synced to Chabad.org form');
     }
-    
+
     function updateChabadAmount() {
       // Clear all amount radio buttons first
       document.querySelectorAll('input[name="q8_amount"]').forEach(radio => {
@@ -1224,7 +1221,7 @@
       const dedicationType = document.getElementById('newDedicationType').value;
       const dedicationName = (document.getElementById('newDedicationName')?.value || '').trim();
       const dedicationMsg = (document.getElementById('newDedicationMessage')?.value || '').trim();
-      
+
       let dedication = '';
       if (dedicationType === 'honor' && dedicationName) {
         dedication = `In honor of ${dedicationName}`;
@@ -1235,18 +1232,16 @@
       } else if (dedicationType === 'custom' && dedicationMsg) {
         dedication = dedicationMsg;
       }
-      
+
       return dedication;
     }
 
   // ============================================================================
   // EXPOSE PUBLIC API
   // ============================================================================
-  
-  // The initializeBalaForm function is already defined above
-  // Just expose it through window.ChabadForms
+
   window.ChabadForms.init = initializeBalaForm;
-  
+
   console.log('✅ Chabad Forms external library loaded');
 
 })();
