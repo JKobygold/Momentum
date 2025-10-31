@@ -9,6 +9,9 @@
 (function() {
   'use strict';
 
+  // Initialize the global ChabadForms object
+  window.ChabadForms = window.ChabadForms || {};
+
   // ============================================================================
   // ALL CODE BELOW IS EXACT COPY FROM MOMENTUM.HTML LINES 2992-4213
   // ============================================================================
