@@ -17,6 +17,36 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
+
+// Minimal .env loader (no dependencies): reads KEY=VALUE lines from a local
+// .env file and populates process.env without overriding existing vars.
+function loadDotEnv(file = path.join(__dirname, '.env')) {
+  let raw;
+  try {
+    raw = fs.readFileSync(file, 'utf8');
+  } catch {
+    return; // no .env file is fine
+  }
+  for (const line of raw.split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    const eq = trimmed.indexOf('=');
+    if (eq === -1) continue;
+    const key = trimmed.slice(0, eq).trim();
+    let value = trimmed.slice(eq + 1).trim();
+    // Strip optional surrounding quotes.
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+    if (key && !(key in process.env)) process.env[key] = value;
+  }
+}
+
+loadDotEnv();
 
 const PUBLISHER = 'Oxford University Press';
 const YEARS = ['2025', '2026'];
