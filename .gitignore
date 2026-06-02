@@ -1,0 +1,10 @@
+# Local environment files (keep secrets like API keys out of git)
+.env
+.env.local
+
+# Generated output from oxford-books.js
+oxford-books-2025-2026.json
+oxford-books-2025-2026.csv
+
+# Node
+node_modules/
